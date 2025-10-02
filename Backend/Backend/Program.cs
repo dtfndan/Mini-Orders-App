@@ -55,8 +55,8 @@ IResult ValidateOrder(OrderDto dto)
 
 app.MapGet("/orders", (List<Order> orders) => Results.Ok(orders));
 
-app.MapGet("/orders/{id}", (Guid ApplicationId, List<Order> orders) =>
-    orders.FirstOrDefault(o => o.Id == ApplicationId) is Order order
+app.MapGet("/orders/{id}", (Guid id, List<Order> orders) =>
+    orders.FirstOrDefault(o => o.Id == id) is Order order     
         ? Results.Ok(order)
         : Results.NotFound());
 

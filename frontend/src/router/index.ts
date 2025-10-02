@@ -15,6 +15,12 @@ const router = createRouter({
         name: 'order-create',
         component: OrderForm
     },
+    {
+        path: '/edit/:id',
+        name: 'order-edit',
+        component: OrderForm,
+        props: true
+    }
 ],
 });
 
