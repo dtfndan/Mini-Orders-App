@@ -13,7 +13,6 @@ const props = defineProps<{
 
 const isEditing = ref(false);
 
-// Inicialización del formulario
 const initialFormState: OrderCreationDto = {
     client: '',
     date: new Date().toISOString().substring(0, 10),
@@ -29,18 +28,13 @@ async function loadOrder(id: string) {
     globalError.value = null;
     isEditing.value = true;
     try {
-        // --- VERIFICA ESTA LÍNEA ---
-        // Construye la URL usando el ID recibido de las props
         const response = await fetch(`${API_BASE_URL}/orders/${id}`); 
         
         if (!response.ok) {
-            // Si el backend devuelve un 404, esto lanza el error
             throw new Error(`Error ${response.status}: No se pudo encontrar la orden con ID ${id}.`);
         }
         
         const orderData: Order = await response.json();
-        
-        // Cargar datos en el formulario
         form.value.client = orderData.client;
         form.value.date = new Date(orderData.date).toISOString().substring(0, 10); 
         form.value.total = orderData.total;
@@ -48,7 +42,6 @@ async function loadOrder(id: string) {
     } catch (e) {
         globalError.value = `Error al cargar la orden: ${(e as Error).message}.`;
         console.error("Error loading order for edit:", e);
-        // Si hay un error, redirigir al listado
         setTimeout(() => router.push('/'), 2000); 
     }
 }
