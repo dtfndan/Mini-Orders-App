@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import type { OrderCreationDto } from '../types/Order';
 
 const router = useRouter();
-const API_BASE_URL = 'https://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5000';
 
 const form = ref<OrderCreationDto>({
     client: '',

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { Order } from '../types/Order';
+import type { Order } from '../types/Order';
 
 const orders = ref<Order[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
 const router = useRouter();
 
-const API_BASE_URL = 'https://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5000';
 
 async function fechtOrders() {
     loading.value = true;

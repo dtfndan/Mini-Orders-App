@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("VueAppPolicy",
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            builder.WithOrigins("http://localhost:5173")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
