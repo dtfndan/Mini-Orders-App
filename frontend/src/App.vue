@@ -1,3 +1,6 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 antialiased">
 
@@ -13,9 +16,6 @@
 
   </div>
 </template>
-
-<script setup lang="ts">
-</script>
 
 <style scoped>
 .router-link-active {
