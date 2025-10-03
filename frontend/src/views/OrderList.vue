@@ -105,7 +105,6 @@ async function confirmDelete() {
 
         if (response.status === 204) {
             console.log(`Orden ${id} eliminada`);
-            // Filtramos la lista localmente
             orders.value = orders.value.filter(order => order.id !== id);
         } else if (response.status === 404) {
             error.value = 'La orden que intentas eliminar no existe.';
@@ -125,10 +124,10 @@ onMounted(fechtOrders);
 
 <template>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-extrabold mb-8 text-gray-900">Gestión de Órdenes</h1>
+    <h1 class="text-4xl font-extrabold mb-8 text-gray-900">Gestión de ordenes</h1>
     
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-semibold text-indigo-700">Listado de Órdenes</h2>
+      <h2 class="text-2xl font-semibold text-indigo-700">Listado de ordenes</h2>
       
       <button 
         @click="router.push('/create')" 
@@ -155,11 +154,7 @@ onMounted(fechtOrders);
       <strong class="font-bold">Error:</strong>
       <span class="block sm:inline ml-2">{{ error }}</span>
     </div>
-    
-    <div v-else-if="filteredOrders.length === 0" class="text-center py-12 text-gray-500 text-xl bg-white rounded-xl shadow-md">
-      No se encontraron órdenes que coincidan con "{{ searchTerm }}".
-    </div>
-    
+        
     <div v-else class="bg-white shadow-xl rounded-xl overflow-hidden">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
@@ -179,7 +174,6 @@ onMounted(fechtOrders);
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold text-right text-lg">${{ order.total.toFixed(2) }}</td>
             
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-              
               <button @click.stop="viewDetails(order.id)" title="Ver Detalles" class="text-gray-500 hover:text-gray-900 transition duration-150 p-1 rounded hover:bg-gray-100">
                 <EyeIcon class="h-5 w-5 inline-block" />
               </button>
@@ -200,7 +194,6 @@ onMounted(fechtOrders);
     </div>
     
     <div v-if="totalPages > 1 && !loading" class="flex justify-center items-center mt-6 p-4 bg-white rounded-xl shadow-md space-x-2">
-      
       <button
         @click="goToPage(currentPage - 1)"
         :disabled="currentPage === 1"
@@ -209,7 +202,6 @@ onMounted(fechtOrders);
       >
         <ChevronLeftIcon class="h-5 w-5" />
       </button>
-
       <div class="flex space-x-1">
         <button
           v-for="page in totalPages"
@@ -224,7 +216,6 @@ onMounted(fechtOrders);
           {{ page }}
         </button>
       </div>
-
       <button
         @click="goToPage(currentPage + 1)"
         :disabled="currentPage === totalPages"
@@ -233,59 +224,51 @@ onMounted(fechtOrders);
       >
         <ChevronRightIcon class="h-5 w-5" />
       </button>
-      
     </div>
-
   </div>
 
   <div 
     v-if="showModal && selectedOrder" 
-    class="fixed inset-0 z-50 overflow-y-auto" 
+    class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/75"
     aria-labelledby="modal-title" 
     role="dialog" 
     aria-modal="true"
     @click.self="showModal = false"
   >
-    <div class="flex items-center justify-center min-h-screen p-4 relative z-50">
-      
-      <div class="bg-white rounded-lg shadow-2xl transform transition-all max-w-lg w-full p-6 border border-indigo-400">
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="bg-white rounded-xl shadow-2xl transform transition-all max-w-lg w-full overflow-hidden">
         
-        <div class="flex justify-between items-center border-b pb-3 mb-4">
-          <h3 class="text-2xl font-bold text-gray-900" id="modal-title">Detalles de la Orden</h3>
+        <div class="flex justify-between items-center bg-gray-50 px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-800" id="modal-title">Detalles de la Orden</h3>
           <button @click="showModal = false" class="text-gray-400 hover:text-gray-600">
             <XMarkIcon class="h-6 w-6" />
           </button>
         </div>
 
-        <div class="space-y-4">
-          
-          <div class="flex justify-between border-b pb-2">
-            <span class="text-sm font-medium text-gray-500">ID Completo:</span>
-            <span class="text-sm font-mono text-gray-800 break-all">{{ selectedOrder.id }}</span>
+        <div class="divide-y divide-gray-200">
+          <div class="px-6 py-4 flex justify-between items-start">
+            <span class="font-medium text-gray-600">ID Completo:</span>
+            <span class="text-sm font-mono text-gray-800 text-right break-all ml-4">{{ selectedOrder.id }}</span>
           </div>
-
-          <div class="flex justify-between border-b pb-2">
-            <span class="text-lg font-medium text-gray-700">Cliente:</span>
-            <span class="text-lg font-semibold text-indigo-600">{{ selectedOrder.client }}</span>
+          <div class="px-6 py-4 flex justify-between items-start bg-gray-50">
+            <span class="font-medium text-gray-600">Cliente:</span>
+            <span class="font-semibold text-indigo-600 text-right ml-4">{{ selectedOrder.client }}</span>
           </div>
-
-          <div class="flex justify-between border-b pb-2">
-            <span class="text-lg font-medium text-gray-700">Fecha:</span>
-            <span class="text-lg text-gray-800">{{ new Date(selectedOrder.date).toLocaleDateString() }}</span>
+          <div class="px-6 py-4 flex justify-between items-start">
+            <span class="font-medium text-gray-600">Fecha:</span>
+            <span class="text-gray-800 text-right ml-4">{{ new Date(selectedOrder.date).toLocaleDateString() }}</span>
           </div>
-
-          <div class="flex justify-between border-b pb-2">
-            <span class="text-lg font-medium text-gray-700">Monto Total:</span>
-            <span class="text-2xl font-extrabold text-green-600">${{ selectedOrder.total.toFixed(2) }}</span>
+          <div class="px-6 py-4 flex justify-between items-start bg-gray-50">
+            <span class="font-medium text-gray-600">Monto Total:</span>
+            <span class="text-xl font-bold text-indigo-600 text-right ml-4">${{ selectedOrder.total.toFixed(2) }}</span>
           </div>
-
         </div>
 
-        <div class="mt-5 sm:mt-6">
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 text-right">
           <button 
             type="button" 
             @click="showModal = false" 
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none transition duration-150"
+            class="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition duration-150"
           >
             Cerrar
           </button>
@@ -294,47 +277,47 @@ onMounted(fechtOrders);
       </div>
     </div>
   </div>
-
   <div 
     v-if="showDeleteConfirm" 
-    class="fixed inset-0 z-50 overflow-y-auto" 
+    class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/75" 
     aria-labelledby="delete-modal-title" 
     role="dialog" 
     aria-modal="true"
     @click.self="showDeleteConfirm = false; orderToDelete = null"
   >
-    <div class="flex items-center justify-center min-h-screen p-4 relative z-50">
-      
-      <div class="bg-white rounded-lg shadow-2xl transform transition-all max-w-sm w-full p-6 border border-red-400">
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="bg-white rounded-xl shadow-2xl transform transition-all max-w-md w-full overflow-hidden">
         
-        <div class="sm:flex sm:items-start">
-          <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-            <ExclamationTriangleIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
-          </div>
-          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-            <h3 class="text-lg leading-6 font-bold text-gray-900" id="delete-modal-title">
-              Confirmar Eliminación
-            </h3>
-            <div class="mt-2">
-              <p class="text-sm text-gray-500">
-                Estás seguro que deseas eliminar esta orden?
-              </p>
+        <div class="p-6">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+              <ExclamationTriangleIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-lg leading-6 font-semibold text-gray-900" id="delete-modal-title">
+                Confirmar Eliminación
+              </h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  ¿Estás seguro de que deseas eliminar esta orden? Esta acción no se puede deshacer.
+                </p>
+              </div>
             </div>
           </div>
         </div>
         
-        <div class="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse space-y-3 sm:space-y-0 sm:space-x-3 sm:space-x-reverse">
+        <div class="bg-gray-50 px-6 py-4 sm:flex sm:flex-row-reverse border-t border-gray-200">
           <button 
             type="button" 
             @click="confirmDelete" 
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none transition duration-150 sm:ml-3 sm:w-auto sm:text-sm"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition duration-150"
           >
             Sí, Eliminar
           </button>
           <button 
             type="button" 
             @click="showDeleteConfirm = false; orderToDelete = null" 
-            class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition duration-150 sm:w-auto sm:text-sm"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm transition duration-150"
           >
             Cancelar
           </button>
@@ -343,5 +326,4 @@ onMounted(fechtOrders);
       </div>
     </div>
   </div>
-
-</template>
+  </template>

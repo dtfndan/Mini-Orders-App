@@ -3,7 +3,7 @@
 
     <header class="bg-white shadow-sm">
       <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-start space-x-6 border-b border-gray-100">
-        <h1 class="text-2xl font-bold text-gray-800 w-full text-center">Mini Orders App</h1>
+        <h1 class="text-5x1 font-bold text-gray-800 w-full text-center te">Mini Orders App</h1>
       </nav>
     </header>
 
